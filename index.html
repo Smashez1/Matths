@@ -1,0 +1,135 @@
+<!DOCTYPE html> 
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Matrix Verde e Vermelha</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      overflow: hidden;
+      font-family: monospace;
+    }
+    canvas {
+      display: block;
+    }
+
+    /* Botão no topo central */
+    #music-btn {
+      position: fixed;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      border: 2px solid #0F0;
+      color: #0F0;
+      font-family: monospace;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+      background: rgba(0, 255, 0, 0.15);
+      transition: all 0.3s ease-in-out;
+      z-index: 1000;
+      text-shadow: 0 0 8px #0F0;
+    }
+
+    #music-btn:hover {
+      background: rgba(0, 255, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+
+  <!-- Música de fundo -->
+  <audio id="bg-music" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+  </audio>
+
+  <!-- Botão -->
+  <button id="music-btn">▶ Música</button>
+
+  <script>
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+
+    const letters = "01ABCDEFGHIJKLMNOPQRSTUVXYZ@#$%&*";
+    const fontSize = 16;
+    let columns, drops;
+
+    let color = "#0F0"; // começa verde
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      columns = Math.floor(canvas.width / fontSize);
+      drops = [];
+      for (let x = 0; x < columns; x++) {
+        drops[x] = 1;
+      }
+    }
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = color;
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 35);
+
+    // === Alterna a cor a cada X segundos ===
+    const segundos = 50;
+    const btn = document.getElementById("music-btn");
+
+    setInterval(() => {
+      if (color === "#0F0") {
+        color = "#F00"; // vermelho
+        btn.style.color = "#F00";
+        btn.style.borderColor = "#F00";
+        btn.style.textShadow = "0 0 8px #F00";
+        btn.style.background = "rgba(255, 0, 0, 0.15)";
+      } else {
+        color = "#0F0"; // verde
+        btn.style.color = "#0F0";
+        btn.style.borderColor = "#0F0";
+        btn.style.textShadow = "0 0 8px #0F0";
+        btn.style.background = "rgba(0, 255, 0, 0.15)";
+      }
+    }, segundos * 1000);
+
+    // Música com botão play/pause
+    const music = document.getElementById("bg-music");
+    let playing = false;
+
+    btn.addEventListener("click", () => {
+      if (!playing) {
+        music.play();
+        btn.textContent = "⏸ Música";
+        playing = true;
+      } else {
+        music.pause();
+        btn.textContent = "▶ Música";
+        playing = false;
+      }
+    });
+  </script>
+</body>
+</html>

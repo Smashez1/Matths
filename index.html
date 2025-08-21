@@ -1,9 +1,14 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <title>Matrix Verde e Vermelha</title>
+  <!-- Font Awesome para ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
+    :root { --accent: #0F0; } /* usado pelo chat para acompanhar a cor atual */
+
     body {
       margin: 0;
       background: black;
@@ -14,12 +19,10 @@
       display: block;
     }
 
-    /* Botão no topo central */
-    #music-btn {
+    /* Botões no topo central */
+    #music-btn, #next-btn {
       position: fixed;
       top: 15px;
-      left: 50%;
-      transform: translateX(-50%);
       padding: 10px 20px;
       border: 2px solid #0F0;
       color: #0F0;
@@ -33,23 +36,112 @@
       z-index: 1000;
       text-shadow: 0 0 8px #0F0;
     }
-
-    #music-btn:hover {
+    #music-btn:hover, #next-btn:hover {
       background: rgba(0, 255, 0, 0.3);
     }
+    #music-btn { left: 50%; transform: translateX(-110%); }
+    #next-btn { left: 50%; transform: translateX(10%); }
+
+    /* Painel lateral de links */
+    #links-panel {
+      position: fixed;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%); /* centraliza verticalmente */
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+    #links-panel a {
+      color: #0F0;
+      text-decoration: none;
+      font-size: 14px;
+      border: 1px solid #0F0;
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: rgba(0, 255, 0, 0.15);
+      transition: all 0.3s;
+      text-align: center;
+      text-shadow: 0 0 6px #0F0;
+      display: flex;
+      align-items: center;
+      gap: 8px; /* espaço entre ícone e texto */
+      justify-content: center;
+    }
+    #links-panel a:hover {
+      background: rgba(0, 255, 0, 0.3);
+      color: #FFF;
+    }
+
+    /* ===== Chat sobreposto (mantém seu layout, só adiciona isso) ===== */
+    #chat-box{
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      width: 360px;
+      max-width: calc(100vw - 40px);
+      height: 260px;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 1000;
+      backdrop-filter: blur(2px);
+    }
+    #chat-header{
+      padding: 6px 10px;
+      font-weight: bold;
+      font-size: 14px;
+      color: var(--accent);
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+      text-shadow: 0 0 6px var(--accent);
+      display:flex; align-items:center; gap:8px;
+    }
+    #chat-messages{
+      height: calc(100% - 30px);
+      padding: 8px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .msg{
+      background: rgba(15,22,32,0.6);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      border-radius: 6px;
+      padding: 6px 8px;
+      line-height: 1.35;
+      color: #dfffdc;
+      opacity: 0; transform: translateY(4px);
+      animation: chatIn .18s ease forwards;
+    }
+    @keyframes chatIn { to { opacity: 1; transform: translateY(0);} }
   </style>
 </head>
 <body>
   <canvas id="matrix"></canvas>
 
   <!-- Música de fundo -->
-  <audio id="bg-music" loop>
-    <source src="musica.mp3" type="audio/mpeg">
-    Seu navegador não suporta áudio.
-  </audio>
+  <audio id="bg-music"></audio>
 
-  <!-- Botão -->
+  <!-- Botões -->
   <button id="music-btn">▶ Música</button>
+  <button id="next-btn">⏭ Pular</button>
+
+  <!-- Painel de Links -->
+  <div id="links-panel">
+    <a href="https://www.youtube.com/@SmashezLive" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+    <a href="https://x.com/Smaashez" target="_blank"><i class="fab fa-x-twitter"></i> Twitter</a>
+    <a href="https://twitch.tv/smaashez" target="_blank"><i class="fab fa-twitch"></i> Twitch</a>
+    <a href="https://kick.com/smashez" target="_blank"><i class="fas fa-gamepad"></i> Kick</a>
+  </div>
+
+  <!-- Chat sobreposto -->
+  <div id="chat-box" aria-live="polite" aria-atomic="false">
+    <div id="chat-header"><i class="fa-solid fa-terminal"></i> Chat</div>
+    <div id="chat-messages"></div>
+  </div>
 
   <script>
     const canvas = document.getElementById("matrix");
@@ -75,25 +167,31 @@
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    let lastTime = 0;
+    let speed = 50; // controla a velocidade da Matrix
 
-      ctx.fillStyle = color;
-      ctx.font = fontSize + "px monospace";
+    function draw(now) {
+      if (now - lastTime > speed) {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        ctx.fillStyle = color;
+        ctx.font = fontSize + "px monospace";
 
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
+        for (let i = 0; i < drops.length; i++) {
+          const text = letters.charAt(Math.floor(Math.random() * letters.length));
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
         }
-        drops[i]++;
+        lastTime = now;
       }
+      requestAnimationFrame(draw);
     }
-
-    setInterval(draw, 35);
+    requestAnimationFrame(draw);
 
     // === Alterna a cor a cada X segundos ===
     const segundos = 50;
@@ -106,30 +204,144 @@
         btn.style.borderColor = "#F00";
         btn.style.textShadow = "0 0 8px #F00";
         btn.style.background = "rgba(255, 0, 0, 0.15)";
+        document.querySelectorAll("#links-panel a").forEach(a=>{
+          a.style.color = "#F00";
+          a.style.borderColor = "#F00";
+          a.style.textShadow = "0 0 6px #F00";
+          a.style.background = "rgba(255, 0, 0, 0.15)";
+        });
+        document.getElementById("next-btn").style.color = "#F00";
+        document.getElementById("next-btn").style.borderColor = "#F00";
+        document.getElementById("next-btn").style.textShadow = "0 0 8px #F00";
+        document.getElementById("next-btn").style.background = "rgba(255, 0, 0, 0.15)";
       } else {
         color = "#0F0"; // verde
         btn.style.color = "#0F0";
         btn.style.borderColor = "#0F0";
         btn.style.textShadow = "0 0 8px #0F0";
         btn.style.background = "rgba(0, 255, 0, 0.15)";
+        document.querySelectorAll("#links-panel a").forEach(a=>{
+          a.style.color = "#0F0";
+          a.style.borderColor = "#0F0";
+          a.style.textShadow = "0 0 6px #0F0";
+          a.style.background = "rgba(0, 255, 0, 0.15)";
+        });
+        document.getElementById("next-btn").style.color = "#0F0";
+        document.getElementById("next-btn").style.borderColor = "#0F0";
+        document.getElementById("next-btn").style.textShadow = "0 0 8px #0F0";
+        document.getElementById("next-btn").style.background = "rgba(0, 255, 0, 0.15)";
       }
+      /* Atualiza a cor do chat via CSS var (mantém seu estilo, só acompanha a cor) */
+      document.documentElement.style.setProperty('--accent', color);
     }, segundos * 1000);
 
-    // Música com botão play/pause
-    const music = document.getElementById("bg-music");
+    // === PLAYLIST ===
+    const playlist = [
+      "musica1.mp3",
+      "musica2.mp3",
+      "musica3.mp3"
+    ];
+    let currentTrack = 0;
+    const player = document.getElementById("bg-music");
+    const nextBtn = document.getElementById("next-btn");
+
+    // Carrega a primeira música
+    player.src = playlist[currentTrack];
+
     let playing = false;
 
+    // Play / Pause
     btn.addEventListener("click", () => {
       if (!playing) {
-        music.play();
+        player.play();
         btn.textContent = "⏸ Música";
         playing = true;
       } else {
-        music.pause();
+        player.pause();
         btn.textContent = "▶ Música";
         playing = false;
       }
     });
+
+    // Pular música
+    function nextTrack() {
+      currentTrack++;
+      if (currentTrack >= playlist.length) {
+        currentTrack = 0;
+      }
+      player.src = playlist[currentTrack];
+      if (playing) {
+        player.play();
+      }
+    }
+    nextBtn.addEventListener("click", nextTrack);
+
+    // Quando terminar, toca a próxima
+    player.addEventListener("ended", nextTrack);
+
+    /* ====== CHAT AUTOMÁTICO (seu script + mais falas) ====== */
+    const mensagens = [
+      "<b>Neo:</b> Estou dentro da Matrix...",
+      "<b>Trinity:</b> Siga-me!",
+      "<b>Morpheus:</b> A pílula vermelha ou azul?",
+      "<b>Agente Smith:</b> Sr. Anderson...",
+      "<b>Oracle:</b> Tudo tem um propósito.",
+      "<b>Veganos:</b> Gostei da música, qual o nome?",
+      "<b>Silva:</b> Vão jogar hoje?",
+      "<b>Ju:</b> Tu viu aquela notícia Maths?",
+      "<b>Ju:</b> Vou te mandar pelo LivePix",
+      "<b>Muka:</b> Essa queda de código tá insana 😂",
+      "<b>Kaelira:</b> Parece até live do Neo!",
+      "<b>Trinity:</b> Confie em mim.",
+      "<b>Eduarda:</b> Smashez seu Lindo vem jogar cmg",
+      "<b>Morpheus:</b> Eu só posso te mostrar a porta...",
+      "<b>Douglinhas:</b> Mano, essa música é braba 🔥",
+      "<b>NEGAN:</b> Vocês viram a atualização nova?",
+      "<b>Agente Smith:</b> A humanidade é um vírus.",
+      "<b>Neo:</b> Eu sei kung fu.",
+      "<b>Trinity:</b> Acredite no impossível.",
+      "<b>Morpheus:</b> A Matrix é um sistema.",
+      "<b>marcolaFPS:</b> Tá parecendo um filme isso aqui 😂",
+      "<b>Lucasmacho:</b> Que vibe, mano!",
+      "<b>Oracle:</b> O futuro não está escrito.",
+      "<b>LordGx:</b> Bora rankear mais tarde?",
+      "<b>Agente Smith:</b> É inevitável.",
+      "<b>Neo:</b> Não estou aqui para lutar com você.",
+      "<b>BrunaS2:</b> Esse chat tá muito bom kkk",
+      "<b>SophiaTk:</b> Alguém manda o link da música aí!"
+    ];
+
+    const mensagensLoop = [
+      "<b>Fuscona:</b> quero tomar pirula vermelha ",
+      "<b>mingal :</b> tem gente da matrix no chat 😂",
+      "<b>senseidasarmas:</b> manda salve salve "
+    ];
+
+    const chatBox = document.getElementById("chat-messages");
+    let index = 0;
+    let loopIndex = 0;
+
+    function addMensagem() {
+      const msg = document.createElement("div");
+      msg.classList.add("msg");
+
+      if (index < mensagens.length) {
+        msg.innerHTML = mensagens[index];
+        index++;
+      } else {
+        msg.innerHTML = mensagensLoop[loopIndex];
+        loopIndex++;
+        if (loopIndex >= mensagensLoop.length) {
+          loopIndex = 0; // reinicia o loop
+        }
+      }
+
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight; // rola pra baixo
+    }
+
+    // adiciona uma mensagem a cada 5 segundos
+    setInterval(addMensagem, 5000);
   </script>
 </body>
 </html>

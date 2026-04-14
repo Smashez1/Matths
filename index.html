@@ -1,22 +1,22 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Matrix Verde e Vermelha</title>
+<meta charset="UTF-8">
+<title>Matrix Verde</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root { --accent: #0F0; }
 
-  <style>
-    :root { --accent: #0F0; }
+body {
+  margin: 0;
+  background: black;
+  overflow: hidden;
+  font-family: monospace;
+}
 
-    body {
-      margin: 0;
-      background: black;
-      overflow: hidden;
-      font-family: monospace;
-    }
-
-      canvas {
+/* MATRIX FUNDO */
+canvas {
   position: fixed;
   top: 0;
   left: 0;
@@ -25,139 +25,96 @@
   z-index: -1;
 }
 
-    /* BOTÕES */
-    #music-btn, #next-btn {
-      position: fixed;
-      top: 15px;
-      padding: 10px 20px;
-      border: 2px solid var(--accent);
-      color: var(--accent);
-      font-family: monospace;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 8px;
-      background: rgba(0,0,0,0.3);
-      transition: 0.3s;
-      z-index: 1000;
-      text-shadow: 0 0 8px var(--accent);
-    }
+/* BOTÕES */
+#music-btn, #next-btn {
+  position: fixed;
+  top: 15px;
+  padding: 10px 20px;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.3);
+  z-index: 1000;
+}
 
-    #music-btn:hover, #next-btn:hover {
-      background: rgba(255,255,255,0.1);
-    }
+#music-btn { left: 50%; transform: translateX(-110%); }
+#next-btn { left: 50%; transform: translateX(10%); }
 
-    #music-btn { left: 50%; transform: translateX(-110%); }
-    #next-btn { left: 50%; transform: translateX(10%); }
+/* PERFIL */
+#links-panel {
+  position: fixed;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
 
-    /* PERFIL + LINKS */
-    #links-panel {
-      position: fixed;
-      top: 42%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      z-index: 1000;
-    }
+.profile-container {
+  position: relative;
+  width: 360px;
+  height: 210px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px var(--accent);
+}
 
-    /* CONTAINER */
-    .profile-container {
-      position: relative;
-      width: 360px;
-      height: 210px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 20px var(--accent);
-    }
+.profile-banner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+}
 
-    /* GIF */
-    .profile-banner {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 1;
-    }
+.profile-img {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
-    /* FOTO */
-    .profile-img {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid var(--accent);
-      box-shadow: 0 0 15px var(--accent);
-      z-index: 2;
-    }
+/* LINKS */
+#links-panel a {
+  color: var(--accent);
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  padding: 8px 12px;
+  border-radius: 6px;
+  min-width: 200px;
+  text-align: center;
+}
 
-    /* LINKS */
-    #links-panel a {
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 14px;
-      border: 1px solid var(--accent);
-      padding: 8px 12px;
-      border-radius: 6px;
-      background: rgba(0,0,0,0.3);
-      text-shadow: 0 0 6px var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-width: 200px;
-      transition: 0.3s;
-    }
+/* CHAT */
+#chat-box {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  width: 300px;
+  height: 200px;
+  border: 1px solid var(--accent);
+}
 
-    #links-panel a:hover {
-      background: rgba(255,255,255,0.1);
-      color: #FFF;
-    }
+#chat-header {
+  color: var(--accent);
+  padding: 5px;
+}
 
-    /* CHAT */
-    #chat-box{
-      position: fixed;
-      left: 20px;
-      bottom: 20px;
-      width: 360px;
-      height: 260px;
-      background: rgba(0,0,0,0.3);
-      border: 1px solid var(--accent);
-      border-radius: 8px;
-      overflow: hidden;
-      z-index: 2000;
-      backdrop-filter: blur(4px);
-    }
-
-    #chat-header{
-      padding: 6px 10px;
-      font-weight: bold;
-      color: var(--accent);
-    }
-
-    #chat-messages{
-      height: calc(100% - 30px);
-      padding: 8px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .msg{
-      background: rgba(15,22,32,0.6);
-      border: 1px solid var(--accent);
-      border-radius: 6px;
-      padding: 6px 8px;
-      color: #dfffdc;
-    }
-  </style>
+#chat-messages {
+  height: 160px;
+  overflow-y: auto;
+  font-size: 12px;
+}
+</style>
 </head>
 
 <body>
@@ -170,8 +127,6 @@
 <button id="next-btn">⏭ Pular</button>
 
 <div id="links-panel">
-
-  <!-- 🔥 PERFIL COM GIF -->
   <div class="profile-container">
     <img src="banner.gif" class="profile-banner">
     <img src="minha-foto.jpg" class="profile-img">
@@ -181,7 +136,6 @@
   <a href="#">Twitter</a>
   <a href="#">Twitch</a>
   <a href="#">Kick</a>
-
 </div>
 
 <div id="chat-box">
@@ -194,55 +148,39 @@
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
 
-const letters = "01ABCDEFGHIJKLMNOPQRSTUVXYZ@#$%&*";
-const fontSize = 16;R
-let columns, drops;
-
-let color = "#0F0";
-let speed = 80;
-let lastTime = 0;
-
-function resizeCanvas() {
+function resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  columns = Math.floor(canvas.width / fontSize);
-  drops = Array(columns).fill(1);
 }
+resize();
+window.addEventListener("resize", resize);
 
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
+const letters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const fontSize = 16;
+let columns = canvas.width / fontSize;
+let drops = Array(Math.floor(columns)).fill(1);
 
-function draw(now) {
-  if (now - lastTime > speed) {
-    ctx.fillStyle = "rgba(0,0,0,0.05)";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+function draw() {
+  ctx.fillStyle = "rgba(0,0,0,0.05)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    ctx.fillStyle = color;
-    ctx.font = fontSize + "px monospace";
+  ctx.fillStyle = "#0F0";
+  ctx.font = fontSize + "px monospace";
 
-    for (let i = 0; i < drops.length; i++) {
-      const text = letters[Math.floor(Math.random()*letters.length)];
-      ctx.fillText(text, i * fontSize, drops[i]*fontSize);
+  for (let i = 0; i < drops.length; i++) {
+    const text = letters[Math.floor(Math.random()*letters.length)];
+    ctx.fillText(text, i*fontSize, drops[i]*fontSize);
 
-      if (drops[i]*fontSize > canvas.height && Math.random() > 0.975) {
-        drops[i] = 0;
-      }
-      drops[i]++;
+    if (drops[i]*fontSize > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
     }
 
-    lastTime = now;
+    drops[i]++;
   }
-  requestAnimationFrame(draw);
 }
-requestAnimationFrame(draw);
+setInterval(draw, 50);
 
-// TROCA COR
-setInterval(() => {
-  color = (color === "#0F0") ? "#F00" : "#0F0";
-  document.documentElement.style.setProperty('--accent', color);
-}, 50000);
-
-// PLAYLIST
+// 🎵 PLAYLIST
 const playlist = ["musica1.mp3","musica2.mp3","musica3.mp3"];
 let currentTrack = 0;
 
@@ -276,24 +214,16 @@ nextBtn.addEventListener("click", nextTrack);
 player.addEventListener("ended", nextTrack);
 
 // CHAT
-const mensagens = [
-  "<b>Neo:</b> Estou dentro da Matrix...",
-  "<b>Trinity:</b> Siga-me!",
-  "<b>Morpheus:</b> A pílula vermelha ou azul?"
-];
+const chat = document.getElementById("chat-messages");
 
-const chatBox = document.getElementById("chat-messages");
-
-function addMensagem() {
+setInterval(() => {
   const msg = document.createElement("div");
-  msg.classList.add("msg");
-  msg.innerHTML = mensagens[Math.floor(Math.random()*mensagens.length)];
-  chatBox.appendChild(msg);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-setInterval(addMensagem, 4000);
+  msg.textContent = "Mensagem da Matrix...";
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+}, 3000);
 </script>
 
 </body>
 </html>
+```

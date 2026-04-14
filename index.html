@@ -15,6 +15,7 @@
       overflow: hidden;
       font-family: monospace;
     }
+
     canvas { display: block; }
 
     #music-btn, #next-btn {
@@ -41,7 +42,7 @@
     #music-btn { left: 50%; transform: translateX(-110%); }
     #next-btn { left: 50%; transform: translateX(10%); }
 
-    /* 🔥 CENTRALIZADO NO MEIO DA TELA */
+    /* 🔥 LINKS NO CENTRO */
     #links-panel {
       position: fixed;
       top: 50%;
@@ -87,7 +88,7 @@
       border: 1px solid var(--accent);
       border-radius: 8px;
       overflow: hidden;
-      z-index: 1000;
+      z-index: 2000;
       backdrop-filter: blur(2px);
     }
 
@@ -133,7 +134,6 @@
   <button id="music-btn">▶ Música</button>
   <button id="next-btn">⏭ Pular</button>
 
-  <!-- LINKS CENTRALIZADOS -->
   <div id="links-panel">
     <a href="#">YouTube</a>
     <a href="#">Twitter</a>
@@ -198,6 +198,50 @@ function draw(now) {
   requestAnimationFrame(draw);
 }
 requestAnimationFrame(draw);
+
+/* 🔥 CHAT COMPLETO RESTAURADO */
+const mensagens = [
+  "<b>Neo:</b> Estou dentro da Matrix...",
+  "<b>Trinity:</b> Siga-me!",
+  "<b>Morpheus:</b> A pílula vermelha ou azul?",
+  "<b>Agente Smith:</b> Sr. Anderson...",
+  "<b>Oracle:</b> Tudo tem um propósito.",
+  "<b>Douglinhas:</b> Mano, essa música é braba 🔥",
+  "<b>Neo:</b> Eu sei kung fu.",
+  "<b>Trinity:</b> Confie em mim.",
+  "<b>Morpheus:</b> A Matrix é um sistema.",
+  "<b>Lucasmacho:</b> Que vibe, mano!",
+  "<b>BrunaS2:</b> Esse chat tá muito bom kkk"
+];
+
+const mensagensLoop = [
+  "<b>Fuscona:</b> quero tomar pirula vermelha",
+  "<b>mingal:</b> tem gente da matrix no chat 😂",
+  "<b>sensei:</b> manda salve!"
+];
+
+const chatBox = document.getElementById("chat-messages");
+let index = 0;
+let loopIndex = 0;
+
+function addMensagem() {
+  const msg = document.createElement("div");
+  msg.classList.add("msg");
+
+  if (index < mensagens.length) {
+    msg.innerHTML = mensagens[index];
+    index++;
+  } else {
+    msg.innerHTML = mensagensLoop[loopIndex];
+    loopIndex++;
+    if (loopIndex >= mensagensLoop.length) loopIndex = 0;
+  }
+
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+setInterval(addMensagem, 4000);
 </script>
 
 </body>

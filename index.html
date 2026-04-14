@@ -44,14 +44,16 @@
 
     /* Painel lateral de links */
     #links-panel {
-      position: fixed;
-      top: 50%;
-      left: 50px;
-      transform: translateY(-50%, -50%); /* centraliza verticalmente */
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 1000;
+      #links-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* centraliza vertical e horizontal */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
     }
     #links-panel a {
       color: #0F0;

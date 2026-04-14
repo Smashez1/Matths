@@ -277,16 +277,29 @@ const mensagensLoop = [
 
 const todasMensagens = [...mensagens, ...mensagensLoop];
 
-let ultimaMensagem = "";
+let mensagensRestantes = [...todasMensagens];
+let nomesUsados = [];
 
 setInterval(() => {
+  if (mensagensRestantes.length === 0) {
+    mensagensRestantes = [...todasMensagens];
+    nomesUsados = [];
+  }
+
   let novaMensagem;
+  let nome;
 
   do {
-    novaMensagem = todasMensagens[Math.floor(Math.random() * todasMensagens.length)];
-  } while (novaMensagem === ultimaMensagem);
+    const index = Math.floor(Math.random() * mensagensRestantes.length);
+    novaMensagem = mensagensRestantes[index];
 
-  ultimaMensagem = novaMensagem;
+    nome = novaMensagem.split(":")[0]; // pega o nome antes do :
+
+  } while (nomesUsados.includes(nome));
+
+  nomesUsados.push(nome);
+
+  mensagensRestantes = mensagensRestantes.filter(msg => msg !== novaMensagem);
 
   const msg = document.createElement("div");
   msg.classList.add("msg");
@@ -294,6 +307,7 @@ setInterval(() => {
 
   chat.appendChild(msg);
   chat.scrollTop = chat.scrollHeight;
+
 }, 2500);
 </script>
 

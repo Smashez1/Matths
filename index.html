@@ -277,14 +277,24 @@ const mensagensLoop = [
 
 const todasMensagens = [...mensagens, ...mensagensLoop];
 
+let ultimaMensagem = "";
+
 setInterval(() => {
+  let novaMensagem;
+
+  do {
+    novaMensagem = todasMensagens[Math.floor(Math.random() * todasMensagens.length)];
+  } while (novaMensagem === ultimaMensagem);
+
+  ultimaMensagem = novaMensagem;
+
   const msg = document.createElement("div");
   msg.classList.add("msg");
-  msg.innerHTML = todasMensagens[Math.floor(Math.random()*todasMensagens.length)];
+  msg.innerHTML = novaMensagem;
+
   chat.appendChild(msg);
   chat.scrollTop = chat.scrollHeight;
 }, 2500);
-
 </script>
 
 </body>

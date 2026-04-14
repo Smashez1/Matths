@@ -93,7 +93,6 @@ canvas {
   text-align: center;
 }
 
-/* CHAT */
 #chat-box {
   position: fixed;
   left: 20px;
@@ -101,6 +100,10 @@ canvas {
   width: 320px;
   height: 240px;
   border: 1px solid var(--accent);
+
+  background: rgba(0, 0, 0, 0.6); /* fundo escuro transparente */
+  backdrop-filter: blur(4px);     /* efeito vidro (top) */
+  border-radius: 8px;
 }
 
 #chat-header {

@@ -1,134 +1,204 @@
-:root { --accent: #0F0; } /* usado pelo chat para acompanhar a cor atual */
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Matrix Verde e Vermelha</title>
 
-body {
-  margin: 0;
-  background: black;
-  overflow: hidden;
-  font-family: monospace;
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root { --accent: #0F0; }
+
+    body {
+      margin: 0;
+      background: black;
+      overflow: hidden;
+      font-family: monospace;
+    }
+    canvas { display: block; }
+
+    #music-btn, #next-btn {
+      position: fixed;
+      top: 15px;
+      padding: 10px 20px;
+      border: 2px solid #0F0;
+      color: #0F0;
+      font-family: monospace;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+      background: rgba(0, 255, 0, 0.15);
+      transition: all 0.3s ease-in-out;
+      z-index: 1000;
+      text-shadow: 0 0 8px #0F0;
+    }
+
+    #music-btn:hover, #next-btn:hover {
+      background: rgba(0, 255, 0, 0.3);
+    }
+
+    #music-btn { left: 50%; transform: translateX(-110%); }
+    #next-btn { left: 50%; transform: translateX(10%); }
+
+    /* 🔥 CENTRALIZADO NO MEIO DA TELA */
+    #links-panel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    #links-panel a {
+      color: #0F0;
+      text-decoration: none;
+      font-size: 14px;
+      border: 1px solid #0F0;
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: rgba(0, 255, 0, 0.15);
+      transition: all 0.3s;
+      text-align: center;
+      text-shadow: 0 0 6px #0F0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      min-width: 200px;
+    }
+
+    #links-panel a:hover {
+      background: rgba(0, 255, 0, 0.3);
+      color: #FFF;
+    }
+
+    #chat-box{
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      width: 360px;
+      max-width: calc(100vw - 40px);
+      height: 260px;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      overflow: hidden;
+      z-index: 1000;
+      backdrop-filter: blur(2px);
+    }
+
+    #chat-header{
+      padding: 6px 10px;
+      font-weight: bold;
+      font-size: 14px;
+      color: var(--accent);
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+      text-shadow: 0 0 6px var(--accent);
+      display:flex; align-items:center; gap:8px;
+    }
+
+    #chat-messages{
+      height: calc(100% - 30px);
+      padding: 8px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .msg{
+      background: rgba(15,22,32,0.6);
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      border-radius: 6px;
+      padding: 6px 8px;
+      line-height: 1.35;
+      color: #dfffdc;
+      opacity: 0; transform: translateY(4px);
+      animation: chatIn .18s ease forwards;
+    }
+
+    @keyframes chatIn { to { opacity: 1; transform: translateY(0);} }
+  </style>
+</head>
+
+<body>
+  <canvas id="matrix"></canvas>
+
+  <audio id="bg-music"></audio>
+
+  <button id="music-btn">▶ Música</button>
+  <button id="next-btn">⏭ Pular</button>
+
+  <!-- LINKS CENTRALIZADOS -->
+  <div id="links-panel">
+    <a href="#">YouTube</a>
+    <a href="#">Twitter</a>
+    <a href="#">Twitch</a>
+    <a href="#">Kick</a>
+    <a href="https://steamcommunity.com/profiles/76561198388397970" target="_blank">
+      <i class="fab fa-steam"></i> Steam
+    </a>
+    <a href="https://desapegogames.com.br/anuncio/306645/conta-valorant-league-of-legends-skins-raras-e-exclusivas" target="_blank">
+      <i class="fas fa-store"></i> Desapego Gamer
+    </a>
+  </div>
+
+  <div id="chat-box">
+    <div id="chat-header"><i class="fa-solid fa-terminal"></i> Chat</div>
+    <div id="chat-messages"></div>
+  </div>
+
+<script>
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+const letters = "01ABCDEFGHIJKLMNOPQRSTUVXYZ@#$%&*";
+const fontSize = 16;
+let columns, drops;
+
+let color = "#0F0";
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  columns = Math.floor(canvas.width / fontSize);
+  drops = [];
+  for (let x = 0; x < columns; x++) drops[x] = 1;
 }
 
-canvas {
-  display: block;
-}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
-/* Botões no topo central */
-#music-btn, #next-btn {
-  position: fixed;
-  top: 15px;
-  padding: 10px 20px;
-  border: 2px solid #0F0;
-  color: #0F0;
-  font-family: monospace;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 8px;
-  background: rgba(0, 255, 0, 0.15);
-  transition: all 0.3s ease-in-out;
-  z-index: 1000;
-  text-shadow: 0 0 8px #0F0;
-}
+let lastTime = 0;
+let speed = 50;
 
-#music-btn:hover, #next-btn:hover {
-  background: rgba(0, 255, 0, 0.3);
-}
+function draw(now) {
+  if (now - lastTime > speed) {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-#music-btn {
-  left: 50%;
-  transform: translateX(-110%);
-}
+    ctx.fillStyle = color;
+    ctx.font = fontSize + "px monospace";
 
-#next-btn {
-  left: 50%;
-  transform: translateX(10%);
-}
+    for (let i = 0; i < drops.length; i++) {
+      const text = letters.charAt(Math.floor(Math.random() * letters.length));
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-/* Painel de links CENTRALIZADO */
-#links-panel {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 1000;
-}
-
-#links-panel a {
-  color: #0F0;
-  text-decoration: none;
-  font-size: 14px;
-  border: 1px solid #0F0;
-  padding: 8px 12px;
-  border-radius: 6px;
-  background: rgba(0, 255, 0, 0.15);
-  transition: all 0.3s;
-  text-align: center;
-  text-shadow: 0 0 6px #0F0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  justify-content: center;
-}
-
-#links-panel a:hover {
-  background: rgba(0, 255, 0, 0.3);
-  color: #FFF;
-}
-
-/* ===== Chat ===== */
-#chat-box {
-  position: fixed;
-  left: 20px;
-  bottom: 20px;
-  width: 360px;
-  max-width: calc(100vw - 40px);
-  height: 260px;
-  background: rgba(0,0,0,0.45);
-  border: 1px solid var(--accent);
-  border-radius: 8px;
-  overflow: hidden;
-  z-index: 1000;
-  backdrop-filter: blur(2px);
-}
-
-#chat-header {
-  padding: 6px 10px;
-  font-weight: bold;
-  font-size: 14px;
-  color: var(--accent);
-  border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
-  text-shadow: 0 0 6px var(--accent);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-#chat-messages {
-  height: calc(100% - 30px);
-  padding: 8px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.msg {
-  background: rgba(15,22,32,0.6);
-  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
-  border-radius: 6px;
-  padding: 6px 8px;
-  line-height: 1.35;
-  color: #dfffdc;
-  opacity: 0;
-  transform: translateY(4px);
-  animation: chatIn .18s ease forwards;
-}
-
-@keyframes chatIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+    lastTime = now;
   }
+  requestAnimationFrame(draw);
 }
+requestAnimationFrame(draw);
+</script>
+
+</body>
+</html>

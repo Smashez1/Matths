@@ -91,6 +91,18 @@ canvas {
   border-radius: 6px;
   min-width: 200px;
   text-align: center;
+  transition: 0.3s;
+}
+
+/* 🔥 EFEITO NEON */
+#links-panel a:hover {
+  color: #fff;
+  box-shadow: 0 0 10px var(--accent),
+              0 0 20px var(--accent),
+              0 0 40px var(--accent);
+  text-shadow: 0 0 5px #fff,
+               0 0 10px var(--accent);
+  transform: scale(1.05);
 }
 
 #chat-box {

@@ -30,20 +30,20 @@
       font-weight: bold;
       cursor: pointer;
       border-radius: 8px;
-      background: rgba(0, 0, 0, 0.3); /* transparente */
-      transition: all 0.3s ease-in-out;
+      background: rgba(0,0,0,0.3);
+      transition: 0.3s;
       z-index: 1000;
       text-shadow: 0 0 8px var(--accent);
     }
 
     #music-btn:hover, #next-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.1);
     }
 
     #music-btn { left: 50%; transform: translateX(-110%); }
     #next-btn { left: 50%; transform: translateX(10%); }
 
-    /* LINKS */
+    /* PERFIL + LINKS */
     #links-panel {
       position: fixed;
       top: 50%;
@@ -51,10 +51,46 @@
       transform: translate(-50%, -50%);
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 10px;
       z-index: 1000;
     }
 
+    /* CONTAINER */
+    .profile-container {
+      position: relative;
+      width: 220px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 20px var(--accent);
+    }
+
+    /* GIF */
+    .profile-banner {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.5;
+    }
+
+    /* FOTO */
+    .profile-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent);
+      box-shadow: 0 0 15px var(--accent);
+      z-index: 2;
+    }
+
+    /* LINKS */
     #links-panel a {
       color: var(--accent);
       text-decoration: none;
@@ -62,19 +98,18 @@
       border: 1px solid var(--accent);
       padding: 8px 12px;
       border-radius: 6px;
-      background: rgba(0, 0, 0, 0.3);
-      text-align: center;
+      background: rgba(0,0,0,0.3);
       text-shadow: 0 0 6px var(--accent);
       display: flex;
       align-items: center;
-      gap: 8px;
       justify-content: center;
+      gap: 8px;
       min-width: 200px;
-      transition: all 0.3s;
+      transition: 0.3s;
     }
 
     #links-panel a:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.1);
       color: #FFF;
     }
 
@@ -97,8 +132,6 @@
       padding: 6px 10px;
       font-weight: bold;
       color: var(--accent);
-      text-shadow: 0 0 6px var(--accent);
-      display:flex; align-items:center; gap:8px;
     }
 
     #chat-messages{
@@ -116,38 +149,41 @@
       border-radius: 6px;
       padding: 6px 8px;
       color: #dfffdc;
-      animation: chatIn .18s ease forwards;
-    }
-
-    @keyframes chatIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 
 <body>
-  <canvas id="matrix"></canvas>
 
-  <audio id="bg-music"></audio>
+<canvas id="matrix"></canvas>
 
-  <button id="music-btn">▶ Música</button>
-  <button id="next-btn">⏭ Pular</button>
+<audio id="bg-music"></audio>
 
-  <div id="links-panel">
-    <a href="#">YouTube</a>
-    <a href="#">Twitter</a>
-    <a href="#">Twitch</a>
-    <a href="#">Kick</a>
+<button id="music-btn">▶ Música</button>
+<button id="next-btn">⏭ Pular</button>
+
+<div id="links-panel">
+
+  <!-- 🔥 PERFIL COM GIF -->
+  <div class="profile-container">
+    <img src="banner.gif" class="profile-banner">
+    <img src="minha-foto.jpg" class="profile-img">
   </div>
 
-  <div id="chat-box">
-    <div id="chat-header">Chat</div>
-    <div id="chat-messages"></div>
-  </div>
+  <a href="#">YouTube</a>
+  <a href="#">Twitter</a>
+  <a href="#">Twitch</a>
+  <a href="#">Kick</a>
+
+</div>
+
+<div id="chat-box">
+  <div id="chat-header">Chat</div>
+  <div id="chat-messages"></div>
+</div>
 
 <script>
-// ===== MATRIX =====
+// MATRIX
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
 
@@ -189,29 +225,20 @@ function draw(now) {
 
     lastTime = now;
   }
-
   requestAnimationFrame(draw);
 }
 requestAnimationFrame(draw);
 
-// 🔴🟢 TROCA DE COR GLOBAL
+// TROCA COR
 setInterval(() => {
   color = (color === "#0F0") ? "#F00" : "#0F0";
   document.documentElement.style.setProperty('--accent', color);
 }, 50000);
 
-
-// ===== PLAYLIST =====
-const playlist = [
-  "musica1.mp3",
-  "musica2.mp3",
-  "musica3.mp3",
-  "musica4.mp3",
-  "musica5.mp3",
-  "musica6.mp3"
-];
-
+// PLAYLIST
+const playlist = ["musica1.mp3","musica2.mp3","musica3.mp3"];
 let currentTrack = 0;
+
 const player = document.getElementById("bg-music");
 const btn = document.getElementById("music-btn");
 const nextBtn = document.getElementById("next-btn");
@@ -221,18 +248,14 @@ player.src = playlist[currentTrack];
 let playing = false;
 
 btn.addEventListener("click", async () => {
-  try {
-    if (!playing) {
-      await player.play();
-      btn.textContent = "⏸ Música";
-      playing = true;
-    } else {
-      player.pause();
-      btn.textContent = "▶ Música";
-      playing = false;
-    }
-  } catch (e) {
-    console.log(e);
+  if (!playing) {
+    await player.play();
+    btn.textContent = "⏸ Música";
+    playing = true;
+  } else {
+    player.pause();
+    btn.textContent = "▶ Música";
+    playing = false;
   }
 });
 
@@ -245,15 +268,11 @@ function nextTrack() {
 nextBtn.addEventListener("click", nextTrack);
 player.addEventListener("ended", nextTrack);
 
-
-// ===== CHAT =====
+// CHAT
 const mensagens = [
   "<b>Neo:</b> Estou dentro da Matrix...",
   "<b>Trinity:</b> Siga-me!",
-  "<b>Morpheus:</b> A pílula vermelha ou azul?",
-  "<b>Agente Smith:</b> Sr. Anderson...",
-  "<b>Oracle:</b> Tudo tem um propósito.",
-  "<b>Neo:</b> Eu sei kung fu."
+  "<b>Morpheus:</b> A pílula vermelha ou azul?"
 ];
 
 const chatBox = document.getElementById("chat-messages");
@@ -267,7 +286,6 @@ function addMensagem() {
 }
 
 setInterval(addMensagem, 4000);
-
 </script>
 
 </body>

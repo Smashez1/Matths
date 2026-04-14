@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -16,7 +15,6 @@ body {
   font-family: monospace;
 }
 
-/* MATRIX */
 canvas {
   position: fixed;
   top: 0;
@@ -26,7 +24,6 @@ canvas {
   z-index: -1;
 }
 
-/* BOTÕES */
 #music-btn, #next-btn {
   position: fixed;
   top: 15px;
@@ -44,7 +41,6 @@ canvas {
 #music-btn { left: 50%; transform: translateX(-110%); }
 #next-btn { left: 50%; transform: translateX(10%); }
 
-/* PERFIL */
 #links-panel {
   position: fixed;
   top: 42%;
@@ -83,7 +79,6 @@ canvas {
   transform: translate(-50%, -50%);
 }
 
-/* LINKS */
 #links-panel a {
   color: var(--accent);
   text-decoration: none;
@@ -91,18 +86,17 @@ canvas {
   padding: 8px 12px;
   border-radius: 6px;
   min-width: 200px;
-  text-align: center;
-  transition: 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 
-/* 🔥 EFEITO NEON */
 #links-panel a:hover {
   color: #fff;
   box-shadow: 0 0 10px var(--accent),
               0 0 20px var(--accent),
               0 0 40px var(--accent);
-  text-shadow: 0 0 5px #fff,
-               0 0 10px var(--accent);
   transform: scale(1.05);
 }
 
@@ -113,9 +107,8 @@ canvas {
   width: 320px;
   height: 240px;
   border: 1px solid var(--accent);
-
-  background: rgba(0, 0, 0, 0.6); /* fundo escuro transparente */
-  backdrop-filter: blur(4px);     /* efeito vidro (top) */
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
   border-radius: 8px;
 }
 
@@ -133,8 +126,7 @@ canvas {
 .msg {
   margin: 4px;
   color: #FFF;
-  text-shadow: 0 0 3px rgba(255,255,255,0.3);}
-
+}
 </style>
 </head>
 
@@ -153,21 +145,10 @@ canvas {
     <img src="minha-foto.jpg" class="profile-img">
   </div>
 
-  <a href="https://youtube.com/seucanal" target="_blank">
-  <i class="fab fa-youtube"></i> YouTube
-</a>
-
-<a href="https://twitter.com/seuuser" target="_blank">
-  <i class="fab fa-twitter"></i> Twitter
-</a>
-
-<a href="https://twitch.tv/seuuser" target="_blank">
-  <i class="fab fa-twitch"></i> Twitch
-</a>
-
-<a href="https://kick.com/seuuser" target="_blank">
-  <i class="fas fa-bolt"></i> Kick
-</a>
+  <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
+  <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+  <a href="#"><i class="fab fa-twitch"></i> Twitch</a>
+  <a href="#"><i class="fas fa-bolt"></i> Kick</a>
 </div>
 
 <div id="chat-box">
@@ -176,7 +157,7 @@ canvas {
 </div>
 
 <script>
-// MATRIX
+// MATRIX OTIMIZADO
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
 
@@ -188,14 +169,14 @@ resize();
 window.addEventListener("resize", resize);
 
 const letters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*";
-const fontSize = 16;
+const fontSize = 18;
 let columns = canvas.width / fontSize;
 let drops = Array(Math.floor(columns)).fill(1);
 
 let color = "#0F0";
 
 function draw() {
-  ctx.fillStyle = "rgba(0,0,0,0.05)";
+  ctx.fillStyle = "rgba(0,0,0,0.08)";
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
   ctx.fillStyle = color;
@@ -205,57 +186,30 @@ function draw() {
     const text = letters[Math.floor(Math.random()*letters.length)];
     ctx.fillText(text, i*fontSize, drops[i]*fontSize);
 
-    if (drops[i]*fontSize > canvas.height && Math.random() > 0.975) {
+    if (drops[i]*fontSize > canvas.height && Math.random() > 0.97) {
       drops[i] = 0;
     }
     drops[i]++;
   }
 }
-setInterval(draw, 50);
 
-// TROCA COR
+// 🚀 substitui setInterval por isso (sem travar)
+function loop() {
+  draw();
+  requestAnimationFrame(loop);
+}
+loop();
+
+// COR
 setInterval(() => {
   color = (color === "#0F0") ? "#F00" : "#0F0";
   document.documentElement.style.setProperty('--accent', color);
 }, 40000);
 
-// PLAYLIST
-const playlist = ["musica1.mp3","musica2.mp3","musica3.mp3"];
-let currentTrack = 0;
-
-const player = document.getElementById("bg-music");
-const btn = document.getElementById("music-btn");
-const nextBtn = document.getElementById("next-btn");
-
-player.src = playlist[currentTrack];
-
-let playing = false;
-
-btn.addEventListener("click", async () => {
-  if (!playing) {
-    await player.play();
-    btn.textContent = "⏸ Música";
-    playing = true;
-  } else {
-    player.pause();
-    btn.textContent = "▶ Música";
-    playing = false;
-  }
-});
-
-function nextTrack() {
-  currentTrack = (currentTrack + 1) % playlist.length;
-  player.src = playlist[currentTrack];
-  if (playing) player.play();
-}
-
-nextBtn.addEventListener("click", nextTrack);
-player.addEventListener("ended", nextTrack);
-
-// 🔥 CHAT COMPLETO
+// CHAT INTELIGENTE
 const chat = document.getElementById("chat-messages");
 
-const mensagens = [
+const todasMensagens = [
   "<b>Neo:</b> Estou dentro da Matrix...",
   "<b>Trinity:</b> Siga-me!",
   "<b>Morpheus:</b> A pílula vermelha ou azul?",
@@ -264,18 +218,12 @@ const mensagens = [
   "<b>Douglinhas:</b> Mano, essa música é braba 🔥",
   "<b>Neo:</b> Eu sei kung fu.",
   "<b>Trinity:</b> Confie em mim.",
-  "<b>Morpheus:</b> A Matrix é um sistema.",
   "<b>Lucasmacho:</b> Que vibe, mano!",
-  "<b>BrunaS2:</b> Esse chat tá muito bom kkk"
-];
-
-const mensagensLoop = [
+  "<b>BrunaS2:</b> Esse chat tá muito bom kkk",
   "<b>Fuscona:</b> quero tomar pílula vermelha",
   "<b>mingal:</b> tem gente da matrix no chat 😂",
   "<b>sensei:</b> manda salve!"
 ];
-
-const todasMensagens = [...mensagens, ...mensagensLoop];
 
 let mensagensRestantes = [...todasMensagens];
 let nomesUsados = [];
@@ -292,13 +240,10 @@ setInterval(() => {
   do {
     const index = Math.floor(Math.random() * mensagensRestantes.length);
     novaMensagem = mensagensRestantes[index];
-
-    nome = novaMensagem.split(":")[0]; // pega o nome antes do :
-
+    nome = novaMensagem.split(":")[0];
   } while (nomesUsados.includes(nome));
 
   nomesUsados.push(nome);
-
   mensagensRestantes = mensagensRestantes.filter(msg => msg !== novaMensagem);
 
   const msg = document.createElement("div");
@@ -313,4 +258,3 @@ setInterval(() => {
 
 </body>
 </html>
-```

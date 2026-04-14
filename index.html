@@ -265,6 +265,10 @@ const mensagensLoop = [
 
 const todasMensagens = [...mensagens, ...mensagensLoop];
 
+const chat = document.getElementById("chat-messages");
+
+const todasMensagens = [...mensagens, ...mensagensLoop];
+
 setInterval(() => {
   const msg = document.createElement("div");
   msg.classList.add("msg");
@@ -272,7 +276,6 @@ setInterval(() => {
   chat.appendChild(msg);
   chat.scrollTop = chat.scrollHeight;
 }, 2500);
-
 </script>
 
 </body>

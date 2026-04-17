@@ -320,40 +320,69 @@ function nextTrack() {
 nextBtn.addEventListener("click", nextTrack);
 player.addEventListener("ended", nextTrack);
 
-// 🔥 CHAT COMPLETO
-const chat = document.getElementById("chat-messages");
+ /* ====== CHAT AUTOMÁTICO (seu script + mais falas) ====== */
+    const mensagens = [
+      "<b>Neo:</b> Estou dentro da Matrix...",
+      "<b>Trinity:</b> Siga-me!",
+      "<b>Morpheus:</b> A pílula vermelha ou azul?",
+      "<b>Agente Smith:</b> Sr. Anderson...",
+      "<b>Oracle:</b> Tudo tem um propósito.",
+      "<b>Veganos:</b> Gostei da música, qual o nome?",
+      "<b>Silva:</b> Vão jogar hoje?",
+      "<b>Ju:</b> Tu viu aquela notícia Maths?",
+      "<b>Ju:</b> Vou te mandar pelo LivePix",
+      "<b>Muka:</b> Essa queda de código tá insana 😂",
+      "<b>Kaelira:</b> Parece até live do Neo!",
+      "<b>Trinity:</b> Confie em mim.",
+      "<b>Eduarda:</b> Smashez seu Lindo vem jogar cmg",
+      "<b>Morpheus:</b> Eu só posso te mostrar a porta...",
+      "<b>Douglinhas:</b> Mano, essa música é braba 🔥",
+      "<b>NEGAN:</b> Vocês viram a atualização nova?",
+      "<b>Agente Smith:</b> A humanidade é um vírus.",
+      "<b>Neo:</b> Eu sei kung fu.",
+      "<b>Trinity:</b> Acredite no impossível.",
+      "<b>Morpheus:</b> A Matrix é um sistema.",
+      "<b>marcolaFPS:</b> Tá parecendo um filme isso aqui 😂",
+      "<b>Lucasmacho:</b> Que vibe, mano!",
+      "<b>Oracle:</b> O futuro não está escrito.",
+      "<b>LordGx:</b> Bora rankear mais tarde?",
+      "<b>Agente Smith:</b> É inevitável.",
+      "<b>Neo:</b> Não estou aqui para lutar com você.",
+      "<b>BrunaS2:</b> Esse chat tá muito bom kkk",
+      "<b>SophiaTk:</b> Alguém manda o link da música aí!"
+    ];
 
-const mensagens = [
-  "<b>Neo:</b> Estou dentro da Matrix...",
-  "<b>Trinity:</b> Siga-me!",
-  "<b>Morpheus:</b> A pílula vermelha ou azul?",
-  "<b>Agente Smith:</b> Sr. Anderson...",
-  "<b>Oracle:</b> Tudo tem um propósito.",
-  "<b>Douglinhas:</b> Mano, essa música é braba 🔥",
-  "<b>Neo:</b> Eu sei kung fu.",
-  "<b>Trinity:</b> Confie em mim.",
-  "<b>Morpheus:</b> A Matrix é um sistema.",
-  "<b>Lucasmacho:</b> Que vibe, mano!",
-  "<b>BrunaS2:</b> Esse chat tá muito bom kkk"
-];
+    const mensagensLoop = [
+      "<b>Fuscona:</b> quero tomar pirula vermelha ",
+      "<b>mingal :</b> tem gente da matrix no chat 😂",
+      "<b>senseidasarmas:</b> manda salve salve "
+    ];
 
-const mensagensLoop = [
-  "<b>Fuscona:</b> quero tomar pílula vermelha",
-  "<b>mingal:</b> tem gente da matrix no chat 😂",
-  "<b>sensei:</b> manda salve!"
-];
+    const chatBox = document.getElementById("chat-messages");
+    let index = 0;
+    let loopIndex = 0;
 
-const todasMensagens = [...mensagens, ...mensagensLoop];
+    function addMensagem() {
+      const msg = document.createElement("div");
+      msg.classList.add("msg");
 
-setInterval(() => {
-  const msg = document.createElement("div");
-  msg.classList.add("msg");
-  msg.innerHTML = todasMensagens[Math.floor(Math.random()*todasMensagens.length)];
-  chat.appendChild(msg);
-  chat.scrollTop = chat.scrollHeight;
-}, 2500);
+      if (index < mensagens.length) {
+        msg.innerHTML = mensagens[index];
+        index++;
+      } else {
+        msg.innerHTML = mensagensLoop[loopIndex];
+        loopIndex++;
+        if (loopIndex >= mensagensLoop.length) {
+          loopIndex = 0; // reinicia o loop
+        }
+      }
 
-</script>
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight; // rola pra baixo
+    }
 
+    // adiciona uma mensagem a cada 5 segundos
+    setInterval(addMensagem, 5000);
+  </script>
 </body>
 </html>

@@ -1,10 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Matrix Hacker Full</title>  
+<title>Matrix Hacker Full</title>
 
-<script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
 <style>
 :root { --accent: #0F0; }
 
@@ -13,26 +13,6 @@ body {
   background: black;
   overflow: hidden;
   font-family: monospace;
-}
-
-/* 🔐 LOGIN HACKER */
-#login-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-#terminal {
-  color: var(--accent);
-  font-size: 14px;
-  white-space: pre-wrap;
 }
 
 /* MATRIX */
@@ -133,8 +113,8 @@ canvas {
   height: 240px;
   border: 1px solid var(--accent);
 
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.6); /* fundo escuro transparente */
+  backdrop-filter: blur(4px);     /* efeito vidro (top) */
   border-radius: 8px;
 }
 
@@ -152,18 +132,12 @@ canvas {
 .msg {
   margin: 4px;
   color: #FFF;
-  text-shadow: 0 0 3px rgba(255,255,255,0.3);
-}
+  text-shadow: 0 0 3px rgba(255,255,255,0.3);}
 
 </style>
 </head>
 
 <body>
-
-<!-- 🔐 LOGIN HACKER -->
-<div id="login-screen">
-  <pre id="terminal"></pre>
-</div>
 
 <canvas id="matrix"></canvas>
 
@@ -178,25 +152,10 @@ canvas {
     <img src="minha-foto.jpg" class="profile-img">
   </div>
 
-  <a href="https://youtube.com/seucanal" target="_blank">
-  <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="20">
-  YouTube
-</a>
-
-<a href="https://twitter.com/seuuser" target="_blank">
-  <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" width="20">
-  Twitter
-</a>
-
-<a href="https://twitch.tv/seuuser" target="_blank">
-  <img src="https://cdn-icons-png.flaticon.com/512/2111/2111668.png" width="20">
-  Twitch
-</a>
-
-<a href="https://kick.com/seuuser" target="_blank">
-  Kick
-</a>
-
+  <a href="#">YouTube</a>
+  <a href="#">Twitter</a>
+  <a href="#">Twitch</a>
+  <a href="#">Kick</a>
 </div>
 
 <div id="chat-box">
@@ -205,45 +164,6 @@ canvas {
 </div>
 
 <script>
-// 🔐 LOGIN HACKER SCRIPT
-const terminal = document.getElementById("terminal");
-
-const lines = [
-  "Iniciando sistema...",
-  "Conectando ao servidor...",
-  "Bypass firewall...",
-  "Acessando banco de dados...",
-  "Usuário encontrado: admin",
-  "Quebrando senha...",
-  "Senha descoberta: ********",
-  "Autenticando...",
-  "ACESSO LIBERADO ✔"
-];
-
-let lineIndex = 0;
-let charIndex = 0;
-
-function typeEffect() {
-  if (lineIndex < lines.length) {
-    if (charIndex < lines[lineIndex].length) {
-      terminal.textContent += lines[lineIndex].charAt(charIndex);
-      charIndex++;
-      setTimeout(typeEffect, 40);
-    } else {
-      terminal.textContent += "\n";
-      lineIndex++;
-      charIndex = 0;
-      setTimeout(typeEffect, 300);
-    }
-  } else {
-    setTimeout(() => {
-      document.getElementById("login-screen").style.display = "none";
-    }, 1000);
-  }
-}
-
-typeEffect();
-
 // MATRIX
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
@@ -320,58 +240,41 @@ function nextTrack() {
 nextBtn.addEventListener("click", nextTrack);
 player.addEventListener("ended", nextTrack);
 
-/* ====== CHAT COM BUG REALISTA ====== */
-    const chatBox = document.getElementById("chat-messages");
-    
-    const mensagens = [
-      "<b>Neo:</b> Tô dentro da Matrix, mano...",
-      "<b>Trinity:</b> Vem comigo, rápido!",
-      "<b>Morpheus:</b> Pílula vermelha ou azul?",
-      "<b>Agente Smith:</b> Senhor Anderson...",
-      "<b>Oracle:</b> Tudo que acontece tem um propósito.",
-      "<b>Veganos:</b> Gostei da música, qual o nome?",
-      "<b>Silva:</b> Vão jogar hoje?",
-      "<b>Ju:</b> Tu viu aquela notícia Maths?",
-      "<b>Douglinhas:</b> Mano, essa música é braba 🔥",
-      "<b>Neo:</b> Eu sei kung fu agora.",
-      "<b>Trinity:</b> Confia em mim.",
-      "<b>Morpheus:</b> A Matrix controla tudo.",
-      "<b>Lucasmacho:</b> Que vibe da hora!",
-      "<b>BrunaS2:</b> Tô amando esse chat kkk" "<b>Fuscona:</b> quero tomar a pílula vermelha",
-      "<b>mingal:</b> tem gente da matrix no chat 😂",
-      "<b>senseidasarmas:</b> manda salve salve"
-    ];
+// 🔥 CHAT COMPLETO
+const chat = document.getElementById("chat-messages");
 
-    let indice = 0;
-    let emLoop = false;
-    let contadorBug = 0;
+const mensagens = [
+  "<b>Neo:</b> Estou dentro da Matrix...",
+  "<b>Trinity:</b> Siga-me!",
+  "<b>Morpheus:</b> A pílula vermelha ou azul?",
+  "<b>Agente Smith:</b> Sr. Anderson...",
+  "<b>Oracle:</b> Tudo tem um propósito.",
+  "<b>Douglinhas:</b> Mano, essa música é braba 🔥",
+  "<b>Neo:</b> Eu sei kung fu.",
+  "<b>Trinity:</b> Confie em mim.",
+  "<b>Morpheus:</b> A Matrix é um sistema.",
+  "<b>Lucasmacho:</b> Que vibe, mano!",
+  "<b>BrunaS2:</b> Esse chat tá muito bom kkk"
+];
 
-    function addMensagem() {
-      const msg = document.createElement("div");
-      msg.classList.add("msg");
+const mensagensLoop = [
+  "<b>Fuscona:</b> quero tomar pílula vermelha",
+  "<b>mingal:</b> tem gente da matrix no chat 😂",
+  "<b>sensei:</b> manda salve!"
+];
 
-      if (!emLoop && indice < mensagens.length) {
-        msg.innerHTML = mensagens ;
-        indice++;
-      } 
-      else {
-        emLoop = true;
-        msg.innerHTML = mensagensLoop ;
-        
-        contadorBug++;
-        
-        // Mostra erro de vez em quando
-        if (contadorBug % 3 === 0) {
-          const erro = document.createElement("div");
-          erro.style.color = "#ff4444";
-          erro.style.fontSize = "13px";
-          erro.innerHTML = "⚠️ Erro de conexão - reconectando...";
-          chatBox.appendChild(erro);
-        }
-      }
+const todasMensagens = [...mensagens, ...mensagensLoop];
 
-      chatBox.appendChild(msg);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
+setInterval(() => {
+  const msg = document.createElement("div");
+  msg.classList.add("msg");
+  msg.innerHTML = todasMensagens[Math.floor(Math.random()*todasMensagens.length)];
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+}, 2500);
 
-    setInterval(addMensagem, 2800);
+</script>
+
+</body>
+</html>
+```

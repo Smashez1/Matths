@@ -320,69 +320,58 @@ function nextTrack() {
 nextBtn.addEventListener("click", nextTrack);
 player.addEventListener("ended", nextTrack);
 
- /* ====== CHAT AUTOMÁTICO (seu script + mais falas) ====== */
+/* ====== CHAT COM BUG REALISTA ====== */
+    const chatBox = document.getElementById("chat-messages");
+    
     const mensagens = [
-      "<b>Neo:</b> Estou dentro da Matrix...",
-      "<b>Trinity:</b> Siga-me!",
-      "<b>Morpheus:</b> A pílula vermelha ou azul?",
-      "<b>Agente Smith:</b> Sr. Anderson...",
-      "<b>Oracle:</b> Tudo tem um propósito.",
+      "<b>Neo:</b> Tô dentro da Matrix, mano...",
+      "<b>Trinity:</b> Vem comigo, rápido!",
+      "<b>Morpheus:</b> Pílula vermelha ou azul?",
+      "<b>Agente Smith:</b> Senhor Anderson...",
+      "<b>Oracle:</b> Tudo que acontece tem um propósito.",
       "<b>Veganos:</b> Gostei da música, qual o nome?",
       "<b>Silva:</b> Vão jogar hoje?",
       "<b>Ju:</b> Tu viu aquela notícia Maths?",
-      "<b>Ju:</b> Vou te mandar pelo LivePix",
-      "<b>Muka:</b> Essa queda de código tá insana 😂",
-      "<b>Kaelira:</b> Parece até live do Neo!",
-      "<b>Trinity:</b> Confie em mim.",
-      "<b>Eduarda:</b> Smashez seu Lindo vem jogar cmg",
-      "<b>Morpheus:</b> Eu só posso te mostrar a porta...",
       "<b>Douglinhas:</b> Mano, essa música é braba 🔥",
-      "<b>NEGAN:</b> Vocês viram a atualização nova?",
-      "<b>Agente Smith:</b> A humanidade é um vírus.",
-      "<b>Neo:</b> Eu sei kung fu.",
-      "<b>Trinity:</b> Acredite no impossível.",
-      "<b>Morpheus:</b> A Matrix é um sistema.",
-      "<b>marcolaFPS:</b> Tá parecendo um filme isso aqui 😂",
-      "<b>Lucasmacho:</b> Que vibe, mano!",
-      "<b>Oracle:</b> O futuro não está escrito.",
-      "<b>LordGx:</b> Bora rankear mais tarde?",
-      "<b>Agente Smith:</b> É inevitável.",
-      "<b>Neo:</b> Não estou aqui para lutar com você.",
-      "<b>BrunaS2:</b> Esse chat tá muito bom kkk",
-      "<b>SophiaTk:</b> Alguém manda o link da música aí!"
+      "<b>Neo:</b> Eu sei kung fu agora.",
+      "<b>Trinity:</b> Confia em mim.",
+      "<b>Morpheus:</b> A Matrix controla tudo.",
+      "<b>Lucasmacho:</b> Que vibe da hora!",
+      "<b>BrunaS2:</b> Tô amando esse chat kkk" "<b>Fuscona:</b> quero tomar a pílula vermelha",
+      "<b>mingal:</b> tem gente da matrix no chat 😂",
+      "<b>senseidasarmas:</b> manda salve salve"
     ];
 
-    const mensagensLoop = [
-      "<b>Fuscona:</b> quero tomar pirula vermelha ",
-      "<b>mingal :</b> tem gente da matrix no chat 😂",
-      "<b>senseidasarmas:</b> manda salve salve "
-    ];
-
-    const chatBox = document.getElementById("chat-messages");
-    let index = 0;
-    let loopIndex = 0;
+    let indice = 0;
+    let emLoop = false;
+    let contadorBug = 0;
 
     function addMensagem() {
       const msg = document.createElement("div");
       msg.classList.add("msg");
 
-      if (index < mensagens.length) {
-        msg.innerHTML = mensagens[index];
-        index++;
-      } else {
-        msg.innerHTML = mensagensLoop[loopIndex];
-        loopIndex++;
-        if (loopIndex >= mensagensLoop.length) {
-          loopIndex = 0; // reinicia o loop
+      if (!emLoop && indice < mensagens.length) {
+        msg.innerHTML = mensagens ;
+        indice++;
+      } 
+      else {
+        emLoop = true;
+        msg.innerHTML = mensagensLoop ;
+        
+        contadorBug++;
+        
+        // Mostra erro de vez em quando
+        if (contadorBug % 3 === 0) {
+          const erro = document.createElement("div");
+          erro.style.color = "#ff4444";
+          erro.style.fontSize = "13px";
+          erro.innerHTML = "⚠️ Erro de conexão - reconectando...";
+          chatBox.appendChild(erro);
         }
       }
 
       chatBox.appendChild(msg);
-      chatBox.scrollTop = chatBox.scrollHeight; // rola pra baixo
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // adiciona uma mensagem a cada 5 segundos
-    setInterval(addMensagem, 5000);
-  </script>
-</body>
-</html>
+    setInterval(addMensagem, 2800);

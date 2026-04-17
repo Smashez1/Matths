@@ -6,7 +6,22 @@
 
 <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
 <style>
-:root { --accent: #0F0; }
+  :root { --accent: #0F0; }
+  
+  #smashez-nick {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--accent);
+  text-align: center;
+  animation: glow 2.5s infinite;
+  transform: translateY(-9px);
+}
+
+@keyframes glow {
+  0% { text-shadow: 0 0 2px var(--accent); }
+  50% { text-shadow: 0 0 8px var(--accent), 0 0 4px #fff; }
+  100% { text-shadow: 0 0 2px var(--accent); }
+}
 
 body {
   margin: 0;
@@ -72,7 +87,7 @@ canvas {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .profile-container {
@@ -82,6 +97,7 @@ canvas {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 0 20px var(--accent);
+  margin-bottom: 39px; /* espaço abaixo do painel */
 }
 
 .profile-banner {
@@ -177,6 +193,9 @@ canvas {
     <img src="banner.gif" class="profile-banner">
     <img src="minha-foto.jpg" class="profile-img">
   </div>
+  
+<!-- 🔥 COLOCA AQUI -->
+<div id="smashez-nick">Smashez</div>
 
   <a href="https://youtube.com/seucanal" target="_blank">
   <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="20">
@@ -383,6 +402,8 @@ player.addEventListener("ended", nextTrack);
 
     // adiciona uma mensagem a cada 5 segundos
     setInterval(addMensagem, 5000);
+  
   </script>
+  
 </body>
 </html>

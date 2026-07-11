@@ -6,8 +6,9 @@
 
 <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
 <style>
-:root { --accent: #0F0; }
+  :root { --accent: #0F0; }
 
+  
   #smashez-nick {
   font-size: 32px;
   font-weight: bold;
@@ -22,7 +23,6 @@
   50% { text-shadow: 0 0 8px var(--accent), 0 0 4px #fff; }
   100% { text-shadow: 0 0 2px var(--accent); }
 }
-
 
 body {
   margin: 0;
@@ -110,7 +110,7 @@ canvas {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .profile-container {
@@ -120,6 +120,7 @@ canvas {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 0 20px var(--accent);
+  margin-bottom: 39px; /* espaço abaixo do painel */
 }
 
 .profile-banner {
@@ -198,6 +199,11 @@ canvas {
 
 <body>
 
+<!-- 🔐 LOGIN HACKER -->
+<div id="login-screen">
+  <pre id="terminal"></pre>
+</div>
+
 <canvas id="matrix"></canvas>
 
 <audio id="bg-music"></audio>
@@ -205,28 +211,37 @@ canvas {
 <button id="music-btn">▶ Música</button>
 <button id="next-btn">⏭ Pular</button>
 
+<!-- 🔊 VOLUME -->
+<div id="volume-container">
+  <span id="volume-icon">🔊</span>
+  <input type="range" id="volume-slider" min="0" max="1" step="0.01">
+</div>
+
 <div id="links-panel">
   <div class="profile-container">
     <img src="banner.gif" class="profile-banner">
     <img src="minha-foto.jpg" class="profile-img">
   </div>
+  
+<!-- 🔥 COLOCA AQUI -->
+<div id="smashez-nick">Smashez</div>
 
-  <a href="https://youtube.com/seucanal" target="_blank">
+  <a href="https://www.youtube.com/@SmashezLive" target="_blank">
   <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="20">
   YouTube
 </a>
 
-<a href="https://twitter.com/seuuser" target="_blank">
+<a href="https://x.com/Smaashez" target="_blank">
   <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" width="20">
   Twitter
 </a>
 
-<a href="https://twitch.tv/seuuser" target="_blank">
+<a href="https://www.twitch.tv/smashez0" target="_blank">
   <img src="https://cdn-icons-png.flaticon.com/512/2111/2111668.png" width="20">
   Twitch
 </a>
 
-<a href="https://kick.com/seuuser" target="_blank">
+<a href="https://kick.com/smashez" target="_blank">
   Kick
 </a>
 
@@ -238,6 +253,45 @@ canvas {
 </div>
 
 <script>
+// 🔐 LOGIN HACKER SCRIPT
+const terminal = document.getElementById("terminal");
+
+const lines = [
+  "Iniciando sistema...",
+  "Conectando ao servidor...",
+  "Bypass firewall...",
+  "Acessando banco de dados...",
+  "Usuário encontrado: admin",
+  "Quebrando senha...",
+  "Senha descoberta: ********",
+  "Autenticando...",
+  "ACESSO LIBERADO ✔"
+];
+
+let lineIndex = 0;
+let charIndex = 0;
+
+function typeEffect() {
+  if (lineIndex < lines.length) {
+    if (charIndex < lines[lineIndex].length) {
+      terminal.textContent += lines[lineIndex].charAt(charIndex);
+      charIndex++;
+      setTimeout(typeEffect, 40);
+    } else {
+      terminal.textContent += "\n";
+      lineIndex++;
+      charIndex = 0;
+      setTimeout(typeEffect, 300);
+    }
+  } else {
+    setTimeout(() => {
+      document.getElementById("login-screen").style.display = "none";
+    }, 1000);
+  }
+}
+
+typeEffect();
+
 // MATRIX
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
@@ -282,7 +336,7 @@ setInterval(() => {
 }, 40000);
 
 // PLAYLIST
-const playlist = ["musica1.mp3","musica2.mp3","musica3.mp3"];
+const playlist = ["musica1.mp3","musica2.mp3","musica3.mp3","musica4.mp3","musica5.mp3","musica6.mp3","musica7.mp3","musica8.mp3"];
 let currentTrack = 0;
 
 const player = document.getElementById("bg-music");
@@ -322,9 +376,10 @@ player.addEventListener("ended", nextTrack);
       "<b>Agente Smith:</b> Sr. Anderson...",
       "<b>Oracle:</b> Tudo tem um propósito.",
       "<b>Veganos:</b> Gostei da música, qual o nome?",
-      "<b>Silva:</b> Vão jogar hoje?",
-      "<b>Ju:</b> Tu viu aquela notícia Maths?",
-      "<b>Ju:</b> Vou te mandar pelo LivePix",
+      "<b>Silva:</b> mandei na sua DM do Insta",
+      "<b>Ju:</b> @Smashesz te amo meu lindo ><",
+      "<b>Roberta:</b> Vou te mandar pelo LivePix",
+      "<b>vaginaldo:</b> alguma menina no chat?. to carente y-y",
       "<b>Muka:</b> Essa queda de código tá insana 😂",
       "<b>Kaelira:</b> Parece até live do Neo!",
       "<b>Trinity:</b> Confie em mim.",
@@ -352,7 +407,7 @@ player.addEventListener("ended", nextTrack);
       "<b>senseidasarmas:</b> manda salve salve "
     ];
 
-/ 🔊 VOLUME SCRIPT
+// 🔊 VOLUME SCRIPT
 const volumeSlider = document.getElementById("volume-slider");
 const volumeIcon = document.getElementById("volume-icon");
 
@@ -396,6 +451,8 @@ volumeSlider.addEventListener("input", () => {
 
     // adiciona uma mensagem a cada 5 segundos
     setInterval(addMensagem, 5000);
+  
   </script>
+  
 </body>
 </html>

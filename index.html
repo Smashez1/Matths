@@ -8,6 +8,22 @@
 <style>
 :root { --accent: #0F0; }
 
+  #smashez-nick {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--accent);
+  text-align: center;
+  animation: glow 2.5s infinite;
+  transform: translateY(-9px);
+}
+
+@keyframes glow {
+  0% { text-shadow: 0 0 2px var(--accent); }
+  50% { text-shadow: 0 0 8px var(--accent), 0 0 4px #fff; }
+  100% { text-shadow: 0 0 2px var(--accent); }
+}
+
+
 body {
   margin: 0;
   background: black;
@@ -62,6 +78,28 @@ canvas {
 
 #music-btn { left: 50%; transform: translateX(-110%); }
 #next-btn { left: 50%; transform: translateX(10%); }
+
+/* 🔊 VOLUME */
+#volume-container {
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(140%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 1000;
+}
+
+#volume-icon {
+  color: var(--accent);
+  font-size: 18px;
+}
+
+#volume-slider {
+  width: 100px;
+  cursor: pointer;
+}
 
 /* PERFIL */
 #links-panel {
@@ -313,6 +351,25 @@ player.addEventListener("ended", nextTrack);
       "<b>mingal :</b> tem gente da matrix no chat 😂",
       "<b>senseidasarmas:</b> manda salve salve "
     ];
+
+/ 🔊 VOLUME SCRIPT
+const volumeSlider = document.getElementById("volume-slider");
+const volumeIcon = document.getElementById("volume-icon");
+
+volumeSlider.value = 0.5;
+player.volume = 0.5;
+
+volumeSlider.addEventListener("input", () => {
+  player.volume = volumeSlider.value;
+
+  if (volumeSlider.value == 0) {
+    volumeIcon.textContent = "🔇";
+  } else if (volumeSlider.value < 0.5) {
+    volumeIcon.textContent = "🔉";
+  } else {
+    volumeIcon.textContent = "🔊";
+  }
+});
 
     const chatBox = document.getElementById("chat-messages");
     let index = 0;

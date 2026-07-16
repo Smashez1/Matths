@@ -2,14 +2,12 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Matrix Hacker Full</title>  
-
+<title>Matrix Hacker Full</title>
 <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
 <style>
-  :root { --accent: #0F0; }
+:root { --accent: #0F0; }
 
-  
-  #smashez-nick {
+#smashez-nick {
   font-size: 32px;
   font-weight: bold;
   color: var(--accent);
@@ -29,26 +27,6 @@ body {
   background: black;
   overflow: hidden;
   font-family: monospace;
-}
-
-/* 🔐 LOGIN HACKER */
-#login-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-#terminal {
-  color: var(--accent);
-  font-size: 14px;
-  white-space: pre-wrap;
 }
 
 /* MATRIX */
@@ -90,16 +68,8 @@ canvas {
   gap: 8px;
   z-index: 1000;
 }
-
-#volume-icon {
-  color: var(--accent);
-  font-size: 18px;
-}
-
-#volume-slider {
-  width: 100px;
-  cursor: pointer;
-}
+#volume-icon { color: var(--accent); font-size: 18px; }
+#volume-slider { width: 100px; cursor: pointer; }
 
 /* PERFIL */
 #links-panel {
@@ -156,11 +126,8 @@ canvas {
 /* 🔥 EFEITO NEON */
 #links-panel a:hover {
   color: #fff;
-  box-shadow: 0 0 10px var(--accent),
-              0 0 20px var(--accent),
-              0 0 40px var(--accent);
-  text-shadow: 0 0 5px #fff,
-               0 0 10px var(--accent);
+  box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 40px var(--accent);
+  text-shadow: 0 0 5px #fff, 0 0 10px var(--accent);
   transform: scale(1.05);
 }
 
@@ -171,41 +138,18 @@ canvas {
   width: 320px;
   height: 240px;
   border: 1px solid var(--accent);
-
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   border-radius: 8px;
 }
-
-#chat-header {
-  color: var(--accent);
-  padding: 5px;
-}
-
-#chat-messages {
-  height: 200px;
-  overflow-y: auto;
-  font-size: 12px;
-}
-
-.msg {
-  margin: 4px;
-  color: #FFF;
-  text-shadow: 0 0 3px rgba(255,255,255,0.3);
-}
-
+#chat-header { color: var(--accent); padding: 5px; }
+#chat-messages { height: 200px; overflow-y: auto; font-size: 12px; }
+.msg { margin: 4px; color: #FFF; text-shadow: 0 0 3px rgba(255,255,255,0.3); }
 </style>
 </head>
-
 <body>
 
-<!-- 🔐 LOGIN HACKER -->
-<div id="login-screen">
-  <pre id="terminal"></pre>
-</div>
-
 <canvas id="matrix"></canvas>
-
 <audio id="bg-music"></audio>
 
 <button id="music-btn">▶ Música</button>
@@ -222,29 +166,22 @@ canvas {
     <img src="banner.gif" class="profile-banner">
     <img src="minha-foto.jpg" class="profile-img">
   </div>
-  
-<!-- 🔥 COLOCA AQUI -->
-<div id="smashez-nick">Smashez</div>
+
+  <!-- 🔥 COLOCA AQUI -->
+  <div id="smashez-nick">Smashez</div>
 
   <a href="https://www.youtube.com/@SmashezLive" target="_blank">
-  <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="20">
-  YouTube
-</a>
-
-<a href="https://x.com/Smaashez" target="_blank">
-  <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" width="20">
-  Twitter
-</a>
-
-<a href="https://www.twitch.tv/smashez0" target="_blank">
-  <img src="https://cdn-icons-png.flaticon.com/512/2111/2111668.png" width="20">
-  Twitch
-</a>
-
-<a href="https://kick.com/smashez" target="_blank">
-  Kick
-</a>
-
+    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="20"> YouTube
+  </a>
+  <a href="https://x.com/Smaashez" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" width="20"> Twitter
+  </a>
+  <a href="https://www.twitch.tv/smashez0" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111668.png" width="20"> Twitch
+  </a>
+  <a href="https://kick.com/smashez" target="_blank">
+    Kick
+  </a>
 </div>
 
 <div id="chat-box">
@@ -253,45 +190,6 @@ canvas {
 </div>
 
 <script>
-// 🔐 LOGIN HACKER SCRIPT
-const terminal = document.getElementById("terminal");
-
-const lines = [
-  "Iniciando sistema...",
-  "Conectando ao servidor...",
-  "Bypass firewall...",
-  "Acessando banco de dados...",
-  "Usuário encontrado: admin",
-  "Quebrando senha...",
-  "Senha descoberta: ********",
-  "Autenticando...",
-  "ACESSO LIBERADO ✔"
-];
-
-let lineIndex = 0;
-let charIndex = 0;
-
-function typeEffect() {
-  if (lineIndex < lines.length) {
-    if (charIndex < lines[lineIndex].length) {
-      terminal.textContent += lines[lineIndex].charAt(charIndex);
-      charIndex++;
-      setTimeout(typeEffect, 40);
-    } else {
-      terminal.textContent += "\n";
-      lineIndex++;
-      charIndex = 0;
-      setTimeout(typeEffect, 300);
-    }
-  } else {
-    setTimeout(() => {
-      document.getElementById("login-screen").style.display = "none";
-    }, 1000);
-  }
-}
-
-typeEffect();
-
 // MATRIX
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
@@ -307,7 +205,6 @@ const letters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&*";
 const fontSize = 16;
 let columns = canvas.width / fontSize;
 let drops = Array(Math.floor(columns)).fill(1);
-
 let color = "#0F0";
 
 function draw() {
@@ -338,13 +235,11 @@ setInterval(() => {
 // PLAYLIST
 const playlist = ["musica1.mp3","musica2.mp3","musica3.mp3","musica4.mp3","musica5.mp3","musica6.mp3","musica7.mp3","musica8.mp3"];
 let currentTrack = 0;
-
 const player = document.getElementById("bg-music");
 const btn = document.getElementById("music-btn");
 const nextBtn = document.getElementById("next-btn");
 
 player.src = playlist[currentTrack];
-
 let playing = false;
 
 btn.addEventListener("click", async () => {
@@ -368,44 +263,44 @@ function nextTrack() {
 nextBtn.addEventListener("click", nextTrack);
 player.addEventListener("ended", nextTrack);
 
- /* ====== CHAT AUTOMÁTICO (seu script + mais falas) ====== */
-    const mensagens = [
-      "<b>Neo:</b> Estou dentro da Matrix...",
-      "<b>Trinity:</b> Siga-me!",
-      "<b>Morpheus:</b> A pílula vermelha ou azul?",
-      "<b>Agente Smith:</b> Sr. Anderson...",
-      "<b>Oracle:</b> Tudo tem um propósito.",
-      "<b>Veganos:</b> Gostei da música, qual o nome?",
-      "<b>Silva:</b> mandei na sua DM do Insta",
-      "<b>Ju:</b> @Smashesz te amo meu lindo ><",
-      "<b>Roberta:</b> Vou te mandar pelo LivePix",
-      "<b>vaginaldo:</b> alguma menina no chat?. to carente y-y",
-      "<b>Muka:</b> Essa queda de código tá insana 😂",
-      "<b>Kaelira:</b> Parece até live do Neo!",
-      "<b>Trinity:</b> Confie em mim.",
-      "<b>Eduarda:</b> Smashez seu Lindo vem jogar cmg",
-      "<b>Morpheus:</b> Eu só posso te mostrar a porta...",
-      "<b>Douglinhas:</b> Mano, essa música é braba 🔥",
-      "<b>NEGAN:</b> Vocês viram a atualização nova?",
-      "<b>Agente Smith:</b> A humanidade é um vírus.",
-      "<b>Neo:</b> Eu sei kung fu.",
-      "<b>Trinity:</b> Acredite no impossível.",
-      "<b>Morpheus:</b> A Matrix é um sistema.",
-      "<b>marcolaFPS:</b> Tá parecendo um filme isso aqui 😂",
-      "<b>Lucasmacho:</b> Que vibe, mano!",
-      "<b>Oracle:</b> O futuro não está escrito.",
-      "<b>LordGx:</b> Bora rankear mais tarde?",
-      "<b>Agente Smith:</b> É inevitável.",
-      "<b>Neo:</b> Não estou aqui para lutar com você.",
-      "<b>BrunaS2:</b> Esse chat tá muito bom kkk",
-      "<b>SophiaTk:</b> Alguém manda o link da música aí!"
-    ];
+/* ====== CHAT AUTOMÁTICO (seu script + mais falas) ====== */
+const mensagens = [
+  "<b>Neo:</b> Estou dentro da Matrix...",
+  "<b>Trinity:</b> Siga-me!",
+  "<b>Morpheus:</b> A pílula vermelha ou azul?",
+  "<b>Agente Smith:</b> Sr. Anderson...",
+  "<b>Oracle:</b> Tudo tem um propósito.",
+  "<b>Veganos:</b> Gostei da música, qual o nome?",
+  "<b>Silva:</b> mandei na sua DM do Insta",
+  "<b>Ju:</b> @Smashesz te amo meu lindo ><",
+  "<b>Roberta:</b> Vou te mandar pelo LivePix",
+  "<b>vaginaldo:</b> alguma menina no chat?. to carente y-y",
+  "<b>Muka:</b> Essa queda de código tá insana 😂",
+  "<b>Kaelira:</b> Parece até live do Neo!",
+  "<b>Trinity:</b> Confie em mim.",
+  "<b>Eduarda:</b> Smashez seu Lindo vem jogar cmg",
+  "<b>Morpheus:</b> Eu só posso te mostrar a porta...",
+  "<b>Douglinhas:</b> Mano, essa música é braba 🔥",
+  "<b>NEGAN:</b> Vocês viram a atualização nova?",
+  "<b>Agente Smith:</b> A humanidade é um vírus.",
+  "<b>Neo:</b> Eu sei kung fu.",
+  "<b>Trinity:</b> Acredite no impossível.",
+  "<b>Morpheus:</b> A Matrix é um sistema.",
+  "<b>marcolaFPS:</b> Tá parecendo um filme isso aqui 😂",
+  "<b>Lucasmacho:</b> Que vibe, mano!",
+  "<b>Oracle:</b> O futuro não está escrito.",
+  "<b>LordGx:</b> Bora rankear mais tarde?",
+  "<b>Agente Smith:</b> É inevitável.",
+  "<b>Neo:</b> Não estou aqui para lutar com você.",
+  "<b>BrunaS2:</b> Esse chat tá muito bom kkk",
+  "<b>SophiaTk:</b> Alguém manda o link da música aí!"
+];
 
-    const mensagensLoop = [
-      "<b>Fuscona:</b> quero tomar pirula vermelha ",
-      "<b>mingal :</b> tem gente da matrix no chat 😂",
-      "<b>senseidasarmas:</b> manda salve salve "
-    ];
+const mensagensLoop = [
+  "<b>Fuscona:</b> quero tomar pirula vermelha ",
+  "<b>mingal :</b> tem gente da matrix no chat 😂",
+  "<b>senseidasarmas:</b> manda salve salve "
+];
 
 // 🔊 VOLUME SCRIPT
 const volumeSlider = document.getElementById("volume-slider");
@@ -416,7 +311,6 @@ player.volume = 0.5;
 
 volumeSlider.addEventListener("input", () => {
   player.volume = volumeSlider.value;
-
   if (volumeSlider.value == 0) {
     volumeIcon.textContent = "🔇";
   } else if (volumeSlider.value < 0.5) {
@@ -426,33 +320,31 @@ volumeSlider.addEventListener("input", () => {
   }
 });
 
-    const chatBox = document.getElementById("chat-messages");
-    let index = 0;
-    let loopIndex = 0;
+const chatBox = document.getElementById("chat-messages");
+let index = 0;
+let loopIndex = 0;
 
-    function addMensagem() {
-      const msg = document.createElement("div");
-      msg.classList.add("msg");
+function addMensagem() {
+  const msg = document.createElement("div");
+  msg.classList.add("msg");
 
-      if (index < mensagens.length) {
-        msg.innerHTML = mensagens[index];
-        index++;
-      } else {
-        msg.innerHTML = mensagensLoop[loopIndex];
-        loopIndex++;
-        if (loopIndex >= mensagensLoop.length) {
-          loopIndex = 0; // reinicia o loop
-        }
-      }
-
-      chatBox.appendChild(msg);
-      chatBox.scrollTop = chatBox.scrollHeight; // rola pra baixo
+  if (index < mensagens.length) {
+    msg.innerHTML = mensagens[index];
+    index++;
+  } else {
+    msg.innerHTML = mensagensLoop[loopIndex];
+    loopIndex++;
+    if (loopIndex >= mensagensLoop.length) {
+      loopIndex = 0; // reinicia o loop
     }
+  }
 
-    // adiciona uma mensagem a cada 5 segundos
-    setInterval(addMensagem, 5000);
-  
-  </script>
-  
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight; // rola pra baixo
+}
+
+// adiciona uma mensagem a cada 5 segundos
+setInterval(addMensagem, 5000);
+</script>
 </body>
 </html>

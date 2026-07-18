@@ -14,6 +14,10 @@
   text-align: center;
   animation: glow 2.5s infinite;
   transform: translateY(-9px);
+  background: #000;
+  padding: 6px 24px;
+  border-radius: 8px;
+  margin-top: 60px;
 }
 
 @keyframes glow {
@@ -81,6 +85,9 @@ canvas {
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 24px 30px;
+  border-radius: 14px;
 }
 
 .profile-container {
@@ -88,9 +95,8 @@ canvas {
   width: 360px;
   height: 210px;
   border-radius: 12px;
-  overflow: hidden;
   box-shadow: 0 0 20px var(--accent);
-  margin-bottom: 39px; /* espaço abaixo do painel */
+  margin-bottom: 20px; /* espaço abaixo do painel */
 }
 
 .profile-banner {
@@ -98,6 +104,7 @@ canvas {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 12px;
 }
 
 .profile-img {
@@ -106,9 +113,10 @@ canvas {
   height: 140px;
   border-radius: 50%;
   border: 3px solid var(--accent);
-  top: 50%;
+  top: 100%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 10;
 }
 
 /* LINKS */
@@ -125,6 +133,36 @@ canvas {
 
 /* 🔥 EFEITO NEON */
 #links-panel a:hover {
+  color: #fff;
+  box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 40px var(--accent);
+  text-shadow: 0 0 5px #fff, 0 0 10px var(--accent);
+  transform: scale(1.05);
+}
+
+#acervo-panel {
+  color: var(--accent);
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--accent);
+  padding: 12px 28px;
+  height: auto;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  margin-top: 30px;
+  text-decoration: none;
+  cursor: pointer;
+  min-width: 220px;
+  width: fit-content;
+  box-shadow: 0 0 10px var(--accent);
+  transition: 0.3s;
+}
+
+#acervo-panel:hover {
   color: #fff;
   box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 40px var(--accent);
   text-shadow: 0 0 5px #fff, 0 0 10px var(--accent);
@@ -176,16 +214,24 @@ canvas {
   <a href="https://x.com/Smaashez" target="_blank">
     <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" width="20"> Twitter
   </a>
+  <a href="https://www.instagram.com/smashez" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" width="20"> Instagram
+  </a>
+  <a href="https://www.tiktok.com/@smashez" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" width="20"> TikTok
+  </a>
   <a href="https://www.twitch.tv/smashez0" target="_blank">
     <img src="https://cdn-icons-png.flaticon.com/512/2111/2111668.png" width="20"> Twitch
   </a>
   <a href="https://kick.com/smashez" target="_blank">
     Kick
   </a>
+
+  <a href="#" id="acervo-panel" target="_blank">Acervo do Smashez</a>
 </div>
 
 <div id="chat-box">
-  <div id="chat-header">Chat</div>
+  <div id="chat-header">Chat Ao vivo</div>
   <div id="chat-messages"></div>
 </div>
 
@@ -207,6 +253,35 @@ let columns = canvas.width / fontSize;
 let drops = Array(Math.floor(columns)).fill(1);
 let color = "#0F0";
 
+// RASTRO DO MOUSE
+const trailParticles = [];
+
+window.addEventListener("mousemove", (e) => {
+  // adiciona só ocasionalmente para ficar discreto
+  if (Math.random() > 0.5) return;
+  trailParticles.push({
+    x: e.clientX,
+    y: e.clientY,
+    char: letters[Math.floor(Math.random() * letters.length)],
+    alpha: 0.5
+  });
+});
+
+function drawTrail() {
+  ctx.font = fontSize + "px monospace";
+  const rgb = color === "#0F0" ? "0, 255, 0" : "255, 0, 0";
+  for (let i = trailParticles.length - 1; i >= 0; i--) {
+    const p = trailParticles[i];
+    ctx.fillStyle = `rgba(${rgb}, ${p.alpha})`;
+    ctx.fillText(p.char, p.x, p.y);
+    p.alpha -= 0.03;
+    p.y += 0.5;
+    if (p.alpha <= 0) {
+      trailParticles.splice(i, 1);
+    }
+  }
+}
+
 function draw() {
   ctx.fillStyle = "rgba(0,0,0,0.05)";
   ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -223,6 +298,8 @@ function draw() {
     }
     drops[i]++;
   }
+
+  drawTrail();
 }
 setInterval(draw, 50);
 

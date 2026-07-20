@@ -44,9 +44,18 @@ canvas {
 }
 
 /* BOTÕES */
-#music-btn, #next-btn {
+#controls-container {
   position: fixed;
   top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+}
+
+#music-btn, #next-btn, #prev-btn {
   padding: 10px 20px;
   border: 2px solid var(--accent);
   color: var(--accent);
@@ -55,18 +64,14 @@ canvas {
   cursor: pointer;
   border-radius: 8px;
   background: rgba(0,0,0,0.3);
-  z-index: 1000;
+  white-space: nowrap;
 }
-
-#music-btn { left: 50%; transform: translateX(-110%); }
-#next-btn { left: 50%; transform: translateX(10%); }
 
 /* 🔊 VOLUME */
 #volume-container {
   position: fixed;
   top: 15px;
-  left: 50%;
-  transform: translateX(140%);
+  right: 20px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -190,8 +195,11 @@ canvas {
 <canvas id="matrix"></canvas>
 <audio id="bg-music"></audio>
 
-<button id="music-btn">▶ Música</button>
-<button id="next-btn">⏭ Pular</button>
+<div id="controls-container">
+  <button id="prev-btn">⏮ Anterior</button>
+  <button id="music-btn">▶ Música</button>
+  <button id="next-btn">⏭ Pular</button>
+</div>
 
 <!-- 🔊 VOLUME -->
 <div id="volume-container">
@@ -201,7 +209,7 @@ canvas {
 
 <div id="links-panel">
   <div class="profile-container">
-    <img src="banner.gif" class="profile-banner">
+    <img src="banner.gif" class="profile-banner" id="profile-banner">
     <img src="minha-foto.jpg" class="profile-img">
   </div>
 
@@ -311,12 +319,36 @@ setInterval(() => {
 
 // PLAYLIST
 const playlist = ["musica1.mp3","musica2.mp3","musica3.mp3","musica4.mp3","musica5.mp3","musica6.mp3","musica7.mp3","musica8.mp3"];
+
+// 🖼️ BANNERS (um para cada música, na mesma ordem/posição da playlist)
+// Troque os nomes dos arquivos abaixo pelos gifs/imagens que você quiser usar.
+const banners = [
+  "banner1.gif",
+  "banner2.gif",
+  "banner3.gif",
+  "banner4.gif",
+  "banner5.gif",
+  "banner6.gif",
+  "banner7.gif",
+  "banner8.gif"
+];
+
 let currentTrack = 0;
 const player = document.getElementById("bg-music");
 const btn = document.getElementById("music-btn");
 const nextBtn = document.getElementById("next-btn");
+const prevBtn = document.getElementById("prev-btn");
+const bannerImg = document.getElementById("profile-banner");
+
+function updateBanner() {
+  // usa o banner correspondente à faixa atual; se não houver, mantém o último
+  if (banners[currentTrack]) {
+    bannerImg.src = banners[currentTrack];
+  }
+}
 
 player.src = playlist[currentTrack];
+updateBanner();
 let playing = false;
 
 btn.addEventListener("click", async () => {
@@ -334,10 +366,19 @@ btn.addEventListener("click", async () => {
 function nextTrack() {
   currentTrack = (currentTrack + 1) % playlist.length;
   player.src = playlist[currentTrack];
+  updateBanner();
+  if (playing) player.play();
+}
+
+function prevTrack() {
+  currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+  player.src = playlist[currentTrack];
+  updateBanner();
   if (playing) player.play();
 }
 
 nextBtn.addEventListener("click", nextTrack);
+prevBtn.addEventListener("click", prevTrack);
 player.addEventListener("ended", nextTrack);
 
 /* ====== CHAT AUTOMÁTICO (seu script + mais falas) ====== */

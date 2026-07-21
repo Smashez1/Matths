@@ -136,9 +136,27 @@ canvas {
   border: 2px solid var(--accent);
   border-radius: 8px;
   background: rgba(0,0,0,0.3);
+  width: 48px;
+  overflow: hidden;
+  transition: width 0.35s ease, background 0.3s ease;
 }
-#volume-icon { color: var(--accent); font-size: 18px; }
-#volume-slider { width: 100px; cursor: pointer; accent-color: var(--accent); }
+#volume-container:hover,
+#volume-container:focus-within {
+  width: 168px;
+}
+#volume-icon { color: var(--accent); font-size: 18px; flex: none; }
+#volume-slider {
+  width: 100px;
+  flex: none;
+  cursor: pointer;
+  accent-color: var(--accent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+#volume-container:hover #volume-slider,
+#volume-container:focus-within #volume-slider {
+  opacity: 1;
+}
 
 /* PERFIL */
 #links-panel {
@@ -302,6 +320,11 @@ canvas {
     bottom: 12px;
     right: 12px;
     padding: 6px 10px;
+    width: 40px;
+  }
+  #volume-container:hover,
+  #volume-container:focus-within {
+    width: 130px;
   }
   #volume-slider { width: 70px; }
   #volume-icon { font-size: 15px; }
